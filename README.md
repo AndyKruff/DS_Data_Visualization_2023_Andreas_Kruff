@@ -11,6 +11,18 @@ Visualization of the traffic situation in the “SmartCity” Basel
 ```
 **Keywords:** Data Visualization
 
+## Setup the Environment:
+
+For the creation of the enviroment I recommend to use a Conda Enviroment, due to dependenciy problems regarding geopandas, geoplot, cartopy and pyproj. Therefore the Repository provides the enviroment.yml for installing the necessary dependencies.
+
+For creating the environment use:
+
+```shell 
+
+conda env create -f environment.yml
+
+```
+ 
 
 ## Description:
 
