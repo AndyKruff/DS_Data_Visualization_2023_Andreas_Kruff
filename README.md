@@ -31,9 +31,9 @@ This repository was created as part of the examination of the module Data Visual
 
 ## Impressions:
 
-| ![Bild 1](./images/heatmap_vis.PNG) | ![Bild 2](./images/kdeplot_basel.PNG) |
+| ![Bild 1](./images/heatmap_vis.png) | ![Bild 2](./images/kdeplot_basel.png) |
 | -------------------- | -------------------- |
-| ![Bild 3](./images/datashader_basel.PNG) | ![Bild 4](./images/choropleth_switzerland.PNG) |
+| ![Bild 3](./images/datashader_basel.png) | ![Bild 4](./images/choropleth_switzerland.PNG) |
 
 ## References:
 
