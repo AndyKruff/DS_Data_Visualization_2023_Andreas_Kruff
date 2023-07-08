@@ -259,7 +259,6 @@ def visualize_noise_pollution_development(
         ax.grid(True)
         ax.legend()
 
-
         plt.show()
 
 
@@ -303,7 +302,6 @@ def set_time_of_day(time_of_day, observation_window):
 
 
 if __name__ == "__main__":
-
     # Preprocesses the data to allow differentiating between the monthly averages for complete day and between day- and nighttime
     df = preprocess_data("../data/noise_measurements.csv", ";", True)
 

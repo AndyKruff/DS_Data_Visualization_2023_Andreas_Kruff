@@ -37,8 +37,8 @@ from pyproj import Transformer
 from matplotlib.cm import viridis
 from matplotlib.cm import cividis
 
-def convert_3D_2D(geometry):
 
+def convert_3D_2D(geometry):
     """
     Takes a GeoSeries of 3D Multi/Polygons (has_z) and returns a list of 2D Multi/Polygons
 
@@ -76,7 +76,6 @@ def convert_3D_2D(geometry):
 
 
 def datashader_plot(just_basel, colormap, save=True, file_name=None, path_to_save=None):
-
     """
     Creating a datashader visualization for the traffic accidents of Basel/Switzerland
 
@@ -115,7 +114,6 @@ def datashader_plot(just_basel, colormap, save=True, file_name=None, path_to_sav
         img = ds.tf.shade(agg, cmap=viridis)
     elif colormap == "cividis":
         img = ds.tf.shade(agg, cmap=cividis)
-
 
     img = ds.tf.set_background(img, "black")
 
@@ -159,7 +157,7 @@ def plotting_KDE_plot(boundary_map, df, colormap):
     plt.show()
 
 
-def plotting_gridding_plot(boundary_map, df,colormap):
+def plotting_gridding_plot(boundary_map, df, colormap):
     """
     Creates a Heatmap-like visualization of Basel regarding the density of traffic accidents
 
@@ -258,10 +256,8 @@ def plotting_gridding_plot(boundary_map, df,colormap):
 
 
 if __name__ == "__main__":
-
     # Calls the function for plotting the datashader visualizations
     datashader_plot(False, True, "test", "../images/")
-
 
     # Reads the shapefile containing the boundaries from all cantons
     shape = gpd.read_file(

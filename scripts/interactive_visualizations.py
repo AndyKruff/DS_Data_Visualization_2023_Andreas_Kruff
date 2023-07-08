@@ -35,7 +35,6 @@ from shapely.geometry import Polygon, MultiPolygon, shape, Point
 
 
 def convert_3D_2D(geometry):
-
     """
     Takes a GeoSeries of 3D Multi/Polygons (has_z) and returns a list of 2D Multi/Polygons
 
@@ -73,7 +72,6 @@ def convert_3D_2D(geometry):
 
 
 def create_interactive_barplots():
-
     """
     Creates interactive stacked barplots with bokeh regarding the traffic accident situation in Basel
 
@@ -147,7 +145,6 @@ def create_interactive_barplots():
     data = {"years": list(year)}
     for i, j in df_group_reformated.iterrows():
         data[str(j["Beschreibung zum Unfalltyp"])] = j["counts_list"]
-
 
     color_palette = Category20c[len(typ)]
 
@@ -487,7 +484,6 @@ def create_choropleth_map(just_basel=True):
 
 
 if __name__ == "__main__":
-
     # Creates the interactive stacked barplot
     create_interactive_barplots()
 
