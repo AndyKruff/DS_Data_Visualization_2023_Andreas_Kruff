@@ -154,6 +154,13 @@ def plotting_KDE_plot(boundary_map, df, colormap):
         "Kernel Density Estimation Plot for traffic accidents \n in Basel (2011 - 2023)",
         fontweight="bold",
     )
+    ax.gridlines(
+        draw_labels={"bottom": "x", "left": "y"},
+        dms=True,
+        x_inline=False,
+        y_inline=False,
+    )
+
     plt.show()
 
 
@@ -257,8 +264,13 @@ def plotting_gridding_plot(boundary_map, df, colormap):
 
 if __name__ == "__main__":
     # Calls the function for plotting the datashader visualizations
-    datashader_plot(False, True, "test", "../images/")
-
+    datashader_plot(
+        just_basel=False,
+        colormap="viridis",
+        save=False,
+        file_name="test",
+        path_to_save="../images/",
+    )
     # Reads the shapefile containing the boundaries from all cantons
     shape = gpd.read_file(
         "../data/shapefiles_suisse/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp"
