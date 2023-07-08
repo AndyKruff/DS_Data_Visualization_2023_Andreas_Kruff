@@ -34,7 +34,7 @@ This repository was created as part of the examination of the module Data Visual
 * `scripts\`: Code implementation of the underlying visualizations
 * `images\`: Exemplary images from the visualizations, that were made for the project
 
-#### Notebook Description
+#### Description of the python files
 | Filename                    | Description                                                                                                                                                         |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `./scripts/usecase_1.py` | Contains the code for the three different approaches for the identification of potential hotspots |
