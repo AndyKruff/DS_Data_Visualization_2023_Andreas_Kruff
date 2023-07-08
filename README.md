@@ -37,8 +37,9 @@ This repository was created as part of the examination of the module Data Visual
 #### Notebook Description
 | Filename                    | Description                                                                                                                                                         |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `` | |
-| `` | |
+| `./scripts/usecase_1.py` | Contains the code for the three different approaches for the identification of potential hotspots |
+| `./scripts/usecase_2.py` | Contains the code for the lineplot visualizations of the traffic noise in Basel-City |
+| `./scripts/interactive_visualizations.py` | Contains the code for the interactive bokeh visualizations |
 
 
 ## Impressions:
