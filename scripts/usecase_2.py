@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def preprocess_data(filepath, delimiter, differentiate):
+def preprocess_data(filepath, delimiter, differentiating, observation_window=(6,22)):
     """
     Preprocesses the data to allow the opportunity to calculate monthly average considering complete days or differentiating
     between day- and nighttime
@@ -13,9 +13,9 @@ def preprocess_data(filepath, delimiter, differentiate):
     ----------
     filepath (String): Path to the noise data dataset
     delimiter (String): Delimiter used within the CSV file
-    differentiate (Boolean): Gives the option to either calculate the average for the complete day or if it differentiates
+    differentiating (Boolean): Gives the option to either calculate the average for the complete day or if it differentiates
                              betweeen day- and nighttime
-
+    observation_window (Tupel): Contains the the starting and end point of the daytime definition (Default: 6 - 22)
     Returns
     -------
     df (DataFrame): Dataframe containing the newly created columns and aggregated data
@@ -25,14 +25,14 @@ def preprocess_data(filepath, delimiter, differentiate):
     df = pd.read_csv(filepath, delimiter=delimiter)
     df["date"] = df["Zeitstempel"].apply(lambda x: x[:7])
 
-    if differentiate:
+    if differentiating:
         # Extracting time of accident from column "Zeitstempel"
 
         df["Uhrzeit"] = df["Zeitstempel"].apply(lambda x: int(x[-13:-12]))
 
         # Creating new column for differentiating day- and nighttime
         df["time_of_day"] = df["Uhrzeit"].apply(
-            set_time_of_day, observation_window=(6, 22)
+            set_time_of_day, observation_window=observation_window
         )
 
         # Using groupby to calculate the monthly average noise pollution during day- and nighttime
@@ -51,10 +51,7 @@ def preprocess_data(filepath, delimiter, differentiate):
     return df
 
 
-def visualize_noise_pollution_development(
-    df,
-    differentiating=True,
-):
+def visualize_noise_pollution_development(filepath,delimiter, differentiating=True, observation_window= (6,22)):
     """
     Creates a matplotlib lineplot regarding the noise pollution at the different monitoring stations in Basel
 
@@ -63,11 +60,16 @@ def visualize_noise_pollution_development(
     df (DataFrame): Preprocessed dataframe containing the noise data
     differentiating (Boolean): Should the entire day be used for the monthly averages or should it be differentiated
                                to compare day- and nighttime (Default: True)
+    observation_window (Tupel): Contains the the starting and end point of the daytime definition (Default: 6 - 22)
 
     Returns
     -------
 
     """
+
+    # Preprocesses the data to allow differentiating between the monthly averages for complete day and between day- and nighttime
+
+    df = preprocess_data(filepath, delimiter, differentiating=differentiating,observation_window=observation_window    )
     # If clause for deciding if the average noise is plotted for the complete day or plotted separatly for day and
     # night time
     if differentiating:
@@ -96,36 +98,36 @@ def visualize_noise_pollution_development(
 
         # Defining the aesthetics for the different lines in the plot regarding color and linestyle
         ax1.plot(
-            nighttime_data.index.values,
-            nighttime_data["Feldbergstrasse"].values,
+            daytime_data.index.values,
+            daytime_data["Feldbergstrasse"].values,
             label="Feldbergstrasse",
             drawstyle="steps-pre",
             color=color_palette[0],
         )
         ax1.plot(
-            nighttime_data.index.values,
-            nighttime_data["Grenzacherstrasse"].values,
+            daytime_data.index.values,
+            daytime_data["Grenzacherstrasse"].values,
             label="Grenzacherstrasse",
             drawstyle="steps-pre",
             color=color_palette[1],
         )
         ax1.plot(
-            nighttime_data.index.values,
-            nighttime_data["Hochbergerstrasse_162"].values,
+            daytime_data.index.values,
+            daytime_data["Hochbergerstrasse_162"].values,
             label="Hochbergerstrasse_162",
             drawstyle="steps-pre",
             color=color_palette[2],
         )
         ax1.plot(
-            nighttime_data.index.values,
-            nighttime_data["St.Jakobs-Strasse"].values,
+            daytime_data.index.values,
+            daytime_data["St.Jakobs-Strasse"].values,
             label="St.Jakobs-Strasse",
             drawstyle="steps-pre",
             color=color_palette[3],
         )
         ax1.plot(
-            nighttime_data.index.values,
-            nighttime_data["Zuercherstrasse148"].values,
+            daytime_data.index.values,
+            daytime_data["Zuercherstrasse148"].values,
             label="Zuercherstrasse148",
             drawstyle="steps-pre",
             color=color_palette[4],
@@ -134,7 +136,7 @@ def visualize_noise_pollution_development(
         # Adding title for plot 1 and labels for the axis
         ax1.set_xticklabels(ax1.get_xticklabels(), rotation=45)
         ax1.set_title(
-            "Average decibel measurements for the different monitoring stations \n in Basel-City (Nighttime)"
+            f"Average decibel measurements for the different monitoring stations \n in Basel-City (Daytime - ({observation_window[0]} - {observation_window[1]} o'clock))"
         )
         ax1.set_xlabel("Dates [in months]")
         ax1.set_ylabel("Measured noise [in dB]")
@@ -145,45 +147,50 @@ def visualize_noise_pollution_development(
         # Similar to ax1
         ax2 = axes[1]
         ax2.plot(
-            daytime_data.index.values,
-            daytime_data["Feldbergstrasse"].values,
+            nighttime_data.index.values,
+            nighttime_data["Feldbergstrasse"].values,
             label="Feldbergstrasse",
             drawstyle="steps-pre",
             color=color_palette[0],
         )
         ax2.plot(
-            daytime_data.index.values,
-            daytime_data["Grenzacherstrasse"].values,
+            nighttime_data.index.values,
+            nighttime_data["Grenzacherstrasse"].values,
             label="Grenzacherstrasse",
             drawstyle="steps-pre",
             color=color_palette[1],
         )
         ax2.plot(
-            daytime_data.index.values,
-            daytime_data["Hochbergerstrasse_162"].values,
+            nighttime_data.index.values,
+            nighttime_data["Hochbergerstrasse_162"].values,
             label="Hochbergerstrasse_162",
             drawstyle="steps-pre",
             color=color_palette[2],
         )
         ax2.plot(
-            daytime_data.index.values,
-            daytime_data["St.Jakobs-Strasse"].values,
+            nighttime_data.index.values,
+            nighttime_data["St.Jakobs-Strasse"].values,
             label="St.Jakobs-Strasse",
             drawstyle="steps-pre",
             color=color_palette[3],
         )
         ax2.plot(
-            daytime_data.index.values,
-            daytime_data["Zuercherstrasse148"].values,
+            nighttime_data.index.values,
+            nighttime_data["Zuercherstrasse148"].values,
             label="Zuercherstrasse148",
             drawstyle="steps-pre",
             color=color_palette[4],
         )
         ax2.set_title("Average decibel measurements during daytime")
 
-        ax2.set_xticklabels(ax1.get_xticklabels(), rotation=45)
+        every_third_month_ticks = daytime_data.index[::3]
+        ax1.set_xticks(every_third_month_ticks)
+        ax1.set_xticklabels(every_third_month_ticks.strftime("%Y-%m"), rotation=45)
+
+        ax2.set_xticks(every_third_month_ticks)
+        ax2.set_xticklabels(every_third_month_ticks.strftime("%Y-%m"), rotation=45)
         ax2.set_title(
-            "Average decibel measurements for the different monitoring stations \n in Basel-City (Daytime)"
+            f"Average decibel measurements for the different monitoring stations \n in Basel-City (Nighttime - ({observation_window[1]} - {observation_window[0]} o'clock))"
         )
         ax2.set_xlabel("Dates [in months]")
         ax2.set_ylabel("Measured noise [in dB]")
@@ -250,7 +257,12 @@ def visualize_noise_pollution_development(
             color=color_palette[4],
         )
 
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
+        # Settings for the x-tick labels (displaying only every third xtick)
+        every_third_month_ticks = dataframe.index[::3]
+        ax.set_xticks(every_third_month_ticks)
+        ax.set_xticklabels(every_third_month_ticks.strftime("%Y-%m"), rotation=45)
+
+
         ax.set_title(
             "Average decibel measurements for the different monitoring stations in Basel-City"
         )
@@ -302,8 +314,6 @@ def set_time_of_day(time_of_day, observation_window):
 
 
 if __name__ == "__main__":
-    # Preprocesses the data to allow differentiating between the monthly averages for complete day and between day- and nighttime
-    df = preprocess_data("../data/noise_measurements.csv", ";", True)
 
     # Creating the visualizations depending on the differentiating option
-    visualize_noise_pollution_development(df, differentiating=True)
+    visualize_noise_pollution_development("../data/noise_measurements.csv", ";", differentiating=True)
