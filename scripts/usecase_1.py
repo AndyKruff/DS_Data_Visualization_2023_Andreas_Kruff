@@ -1,42 +1,17 @@
 import datashader as ds
-import pandas as pd
-from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar
-from bokeh.plotting import figure
 from datashader.utils import export_image
 import colorcet as cc
-import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 import pandas as pd
 import geopandas as gpd
 import numpy as np
 import shapely
-
-import pyproj
-from pyproj import Transformer
-from shapely.geometry import Polygon, MultiPolygon, shape, Point
-
 import geoplot
-from geoplot import utils
-from geoplot import (
-    pointplot,
-    voronoi,
-    kdeplot,
-    polyplot,
-    webmap,
-    choropleth,
-    cartogram,
-    quadtree,
-    sankey,
-)
-from geoplot.crs import AlbersEqualArea, WebMercator
 import geoplot.crs as gcrs
-
-
-from shapely.geometry import Polygon, MultiPolygon, shape, Point
+from shapely.geometry import Polygon, MultiPolygon, Point
 from pyproj import Transformer
 from matplotlib.cm import viridis
 from matplotlib.cm import cividis
-from datashader.mpl_ext import dsshow, alpha_colormap
 
 
 def convert_3D_2D(geometry):

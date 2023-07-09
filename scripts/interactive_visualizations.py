@@ -1,38 +1,19 @@
 import pandas as pd
-from bokeh.io import show
-from bokeh.palettes import turbo
-
-from bokeh.palettes import Bright
-from bokeh.palettes import inferno
-from bokeh.palettes import TolPRGn
-
-import seaborn as sns
-
 from bokeh.models import Legend
-from bokeh.plotting import figure
 import geopandas as gpd
 import numpy as np
-import json
 from bokeh.io import show
 from bokeh.models import (
-    CDSView,
     ColorBar,
-    ColumnDataSource,
-    CustomJS,
-    CustomJSFilter,
     GeoJSONDataSource,
     HoverTool,
     LinearColorMapper,
-    Slider,
 )
-from bokeh.layouts import column, row
 from bokeh.palettes import brewer
 from bokeh.plotting import figure
-from bokeh.palettes import Category20c
-import pyproj
 from pyproj import Transformer
-from shapely.geometry import Polygon, MultiPolygon, shape, Point
-from bokeh.palettes import Category10, Category20, Category20b, Category20c
+from shapely.geometry import Polygon, MultiPolygon, Point
+from bokeh.palettes import Category20, Category20b, Category20c
 
 
 def convert_3D_2D(geometry):
@@ -455,7 +436,7 @@ def create_choropleth_map(year_to_display, colormap="Viridis", just_basel=True):
     p.xgrid.grid_line_color = None
     p.ygrid.grid_line_color = None
     p.title.align = "center"
-    p.title.text_align = 'center'
+    p.title.text_align = "center"
 
     p.title.text_font_size = "25px"
     p.yaxis.axis_label = "Latitude Coordinates in WGS84"
