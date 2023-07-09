@@ -32,6 +32,7 @@ from bokeh.palettes import Category20c
 import pyproj
 from pyproj import Transformer
 from shapely.geometry import Polygon, MultiPolygon, shape, Point
+from bokeh.palettes import Category10, Category20, Category20b, Category20c
 
 
 def convert_3D_2D(geometry):
@@ -71,10 +72,13 @@ def convert_3D_2D(geometry):
     return transformed_coords_list
 
 
-def create_interactive_barplots():
+def create_interactive_barplots(colormap="Category20c"):
     """
     Creates interactive stacked barplots with bokeh regarding the traffic accident situation in Basel
 
+    Parameters
+    ----------
+    colormap (String): Oppportunities provided are Category20, Category20b and Category20c (Default: Category20c)
 
     Returns
     -------
@@ -146,7 +150,12 @@ def create_interactive_barplots():
     for i, j in df_group_reformated.iterrows():
         data[str(j["Beschreibung zum Unfalltyp"])] = j["counts_list"]
 
-    color_palette = Category20c[len(typ)]
+    if colormap == "Category20":
+        color_palette = Category20[len(typ)]
+    elif colormap == "Category20b":
+        color_palette = Category20b[len(typ)]
+    elif colormap == "Category20c":
+        color_palette = Category20c[len(typ)]
 
     # Creating the stacked barplot
     p = figure(
@@ -180,13 +189,15 @@ def create_interactive_barplots():
     show(p)
 
 
-def create_choropleth_map(just_basel=True):
+def create_choropleth_map(year_to_display, colormap="Viridis", just_basel=True):
     """
     Creates a choropleth map of either the Switzerland or the canton Basel-City
 
     Parameters
     ----------
     just_basel (Boolean): Should the choropleth map be created based on the city of Basel or the Switzerland
+    colormap (String): Opportunities provided are cividis, viridis and Reds (Default: viridis)
+    year_to_display (Integer): Accidents of that year will be displayed in the choropleth map
 
     Returns
     -------
@@ -327,7 +338,7 @@ def create_choropleth_map(just_basel=True):
         )
 
         # Calculating the total amount of accidents per year and per municipality
-        merge_df["Gesamt"] = merge_df.apply(
+        merge_df["Total"] = merge_df.apply(
             lambda x: x["Minor road"]
             + x["Motorway"]
             + x["Motorway side installation"]
@@ -363,7 +374,7 @@ def create_choropleth_map(just_basel=True):
         merge_df = shape.merge(pivot_df, left_on="NAME", right_on="name")
 
         # Calculating the total amount of accidents per year and per canton
-        merge_df["Gesamt"] = merge_df.apply(
+        merge_df["Total"] = merge_df.apply(
             lambda x: x["Minor road"]
             + x["Motorway"]
             + x["Motorway side installation"]
@@ -384,9 +395,11 @@ def create_choropleth_map(just_basel=True):
                 "Motorway side installation",
                 "Other",
                 "Principal road",
-                "Gesamt",
+                "Total",
             ]
         ]
+
+    merge_df = merge_df.to_crs(epsg=4326)
 
     # Reformat the dataframe into a GeoJson
     geosource = GeoJSONDataSource(geojson=merge_df.to_json())
@@ -394,17 +407,26 @@ def create_choropleth_map(just_basel=True):
     # Define color palettes
     if just_basel:
         geosource = GeoJSONDataSource(
-            geojson=merge_df[merge_df["accidentyea"] == "2011"].to_json()
+            geojson=merge_df[merge_df["accidentyea"] == str(year_to_display)].to_json()
         )
     else:
         geosource = GeoJSONDataSource(
-            geojson=merge_df[merge_df["AccidentYear"] == 2011].to_json()
+            geojson=merge_df[merge_df["AccidentYear"] == year_to_display].to_json()
         )
 
-    palette = brewer["Reds"][8]
-    palette = palette[
-        ::-1
-    ]  # reverse order of colors so higher values have darker colors
+    if colormap == "Reds":
+        palette = brewer["Reds"]
+    elif colormap == "viridis" or colormap == "Viridis":
+        from bokeh.palettes import Viridis256
+
+        palette = Viridis256
+    elif colormap == "cividis" or colormap == "cividis":
+        from bokeh.palettes import Cividis256
+
+        palette = Cividis256
+
+    # reverse order of colors so higher values have darker colors
+    palette = palette[::-1]
     # Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
     color_mapper = LinearColorMapper(palette=palette, low=0, high=1000)
 
@@ -414,7 +436,7 @@ def create_choropleth_map(just_basel=True):
     # Create figure object.
     if just_basel:
         p = figure(
-            title="Total Car Accidents in the three municipalities of Basel, 2011",
+            title=f"Total Car Accidents in the three municipalities of Basel, {year_to_display}",
             height=600,
             width=950,
             toolbar_location="below",
@@ -422,7 +444,7 @@ def create_choropleth_map(just_basel=True):
         )
     else:
         p = figure(
-            title="Comparing the total amount of accidents between the cantons of Switzerland, 2011",
+            title=f"Comparing the total amount of accidents between the cantons of Switzerland, {year_to_display}",
             height=600,
             width=950,
             toolbar_location="below",
@@ -442,7 +464,7 @@ def create_choropleth_map(just_basel=True):
         "xs",
         "ys",
         source=geosource,
-        fill_color={"field": "Gesamt", "transform": color_mapper},
+        fill_color={"field": "Total", "transform": color_mapper},
         line_color="gray",
         line_width=0.25,
         fill_alpha=1,
@@ -454,7 +476,7 @@ def create_choropleth_map(just_basel=True):
                 renderers=[states],
                 tooltips=[
                     ("Municipality", "@name"),
-                    ("Total Accidents", "@Gesamt"),
+                    ("Total Accidents", "@Total"),
                     ("Minor road", "@{Minor road}"),
                     ("Motorway", "@Motorway"),
                     ("Motorway side installation", "@{Motorway side installation}"),
@@ -469,7 +491,7 @@ def create_choropleth_map(just_basel=True):
                 renderers=[states],
                 tooltips=[
                     ("Canton", "@name"),
-                    ("Total Accidents", "@Gesamt"),
+                    ("Total Accidents", "@Total"),
                     ("Minor road", "@{Minor road}"),
                     ("Motorway", "@Motorway"),
                     ("Motorway side installation", "@{Motorway side installation}"),
@@ -485,7 +507,6 @@ def create_choropleth_map(just_basel=True):
 
 if __name__ == "__main__":
     # Creates the interactive stacked barplot
-    create_interactive_barplots()
-
+    create_interactive_barplots(colormap="Category20c")
     # Creates the interactive choropleth map
-    create_choropleth_map(True)
+    create_choropleth_map(just_basel=False, year_to_display=2012, colormap="cividis")

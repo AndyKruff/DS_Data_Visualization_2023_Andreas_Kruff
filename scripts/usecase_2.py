@@ -52,7 +52,11 @@ def preprocess_data(filepath, delimiter, differentiating, observation_window=(6,
 
 
 def visualize_noise_pollution_development(
-    filepath, delimiter, differentiating=True, observation_window=(6, 22)
+    filepath,
+    delimiter,
+    differentiating=True,
+    observation_window=(6, 22),
+    colormap="colorblind",
 ):
     """
     Creates a matplotlib lineplot regarding the noise pollution at the different monitoring stations in Basel
@@ -63,6 +67,7 @@ def visualize_noise_pollution_development(
     differentiating (Boolean): Should the entire day be used for the monthly averages or should it be differentiated
                                to compare day- and nighttime (Default: True)
     observation_window (Tupel): Contains the the starting and end point of the daytime definition (Default: 6 - 22)
+    colormap (String): Allows to choose between colormaps (Recommended: colorblind) (Default: colorblind)
 
     Returns
     -------
