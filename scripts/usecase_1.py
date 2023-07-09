@@ -36,6 +36,7 @@ from shapely.geometry import Polygon, MultiPolygon, shape, Point
 from pyproj import Transformer
 from matplotlib.cm import viridis
 from matplotlib.cm import cividis
+from datashader.mpl_ext import dsshow, alpha_colormap
 
 
 def convert_3D_2D(geometry):
@@ -117,7 +118,7 @@ def datashader_plot(just_basel, colormap, save=True, file_name=None, path_to_sav
 
     img = ds.tf.set_background(img, "black")
 
-    plt.imshow(img, aspect="auto")
+    plt.imshow(img.to_pil())
     plt.show()
 
     if save:
