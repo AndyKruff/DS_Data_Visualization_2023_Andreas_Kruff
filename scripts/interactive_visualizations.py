@@ -436,7 +436,7 @@ def create_choropleth_map(year_to_display, colormap="Viridis", just_basel=True):
     # Create figure object.
     if just_basel:
         p = figure(
-            title=f"Total Car Accidents in the three municipalities of Basel, {year_to_display}",
+            title=f"Total Car Accidents in the three municipalities \n of Basel, {year_to_display}",
             height=600,
             width=950,
             toolbar_location="below",
@@ -444,7 +444,7 @@ def create_choropleth_map(year_to_display, colormap="Viridis", just_basel=True):
         )
     else:
         p = figure(
-            title=f"Comparing the total amount of accidents between the cantons of Switzerland, {year_to_display}",
+            title=f"Comparing the total amount of accidents between the cantons \n of Switzerland, {year_to_display}",
             height=600,
             width=950,
             toolbar_location="below",
@@ -455,6 +455,8 @@ def create_choropleth_map(year_to_display, colormap="Viridis", just_basel=True):
     p.xgrid.grid_line_color = None
     p.ygrid.grid_line_color = None
     p.title.align = "center"
+    p.title.text_align = 'center'
+
     p.title.text_font_size = "25px"
     p.yaxis.axis_label = "Latitude Coordinates in WGS84"
     p.xaxis.axis_label = "Longitude Coordinates in WGS84"
@@ -509,4 +511,4 @@ if __name__ == "__main__":
     # Creates the interactive stacked barplot
     create_interactive_barplots(colormap="Category20c")
     # Creates the interactive choropleth map
-    create_choropleth_map(just_basel=False, year_to_display=2012, colormap="cividis")
+    create_choropleth_map(just_basel=False, year_to_display=2012, colormap="viridis")
