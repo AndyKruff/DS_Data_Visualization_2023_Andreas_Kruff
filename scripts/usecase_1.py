@@ -207,13 +207,13 @@ def plotting_gridding_plot(boundary_map, df, colormap):
     dissolve = merged.dissolve(by="index_right", aggfunc="count")
     # put this into cell
     cell.loc[dissolve.index, "accidents"] = dissolve.accidents.values
-
+    print(dissolve.head())
     # Creating the plot with the gridlayout
     ax = cell.plot(
         column="accidents",
         figsize=(12, 8),
         cmap=colormap,
-        vmax=72,
+        vmax=max(dissolve["accidents"]),
         edgecolor="grey",
         legend=True,
     )
@@ -240,6 +240,7 @@ def plotting_gridding_plot(boundary_map, df, colormap):
 
 if __name__ == "__main__":
     # Calls the function for plotting the datashader visualizations
+    """
     datashader_plot(
         just_basel=False,
         colormap="viridis",
@@ -247,6 +248,7 @@ if __name__ == "__main__":
         file_name="test",
         path_to_save="../images/",
     )
+    """
     # Reads the shapefile containing the boundaries from all cantons
     shape = gpd.read_file(
         "../data/shapefiles_suisse/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp"
@@ -262,7 +264,7 @@ if __name__ == "__main__":
     df = gpd.read_file("../data/straßenverkehrsunfaelle_shp/100120.shp")
 
     # Calls the function for plotting the KDE plot visualization
-    plotting_KDE_plot(shape_filter, df, "viridis")
+    #plotting_KDE_plot(shape_filter, df, "viridis")
 
     # Calls the function for plotting the Gridding plot visualization
     plotting_gridding_plot(shape_filter, df, "viridis")
