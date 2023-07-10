@@ -409,7 +409,8 @@ def create_choropleth_map(year_to_display, colormap="Viridis", just_basel=True):
     # reverse order of colors so higher values have darker colors
     palette = palette[::-1]
     # Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
-    color_mapper = LinearColorMapper(palette=palette, low=0, high=1000)
+    #color_mapper = LinearColorMapper(palette=palette, low=0, high=1000)
+    color_mapper = LinearColorMapper(palette=palette, low=0, high=max(merge_df["Total"]))
 
     # Create color bar.
     color_bar = ColorBar(color_mapper=color_mapper)
