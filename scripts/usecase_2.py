@@ -101,8 +101,8 @@ def visualize_noise_pollution_development(
         nighttime_data.index = pd.to_datetime(nighttime_data.index)
         daytime_data.index = pd.to_datetime(daytime_data.index)
 
-        # Choosing a color pallete from Seaborn ("colorblind")
-        color_palette = sns.color_palette("colorblind")
+        # Choosing a color pallete from Seaborn (Default: "colorblind")
+        color_palette = sns.color_palette(colormap)
 
         # Defining the figure regarding size, amount of plots ...
         fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6), sharey=True)
@@ -230,7 +230,7 @@ def visualize_noise_pollution_development(
         dataframe.index = pd.to_datetime(dataframe.index)
 
         # Similar as above
-        color_palette = sns.color_palette("colorblind")
+        color_palette = sns.color_palette(colormap)
 
         fig, ax = plt.subplots()
         ax.plot(
